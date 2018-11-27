@@ -1,4 +1,4 @@
-# Job Scheduling 貪婪演算法
+# Job Scheduling 貪婪法
 
 
 ```java
