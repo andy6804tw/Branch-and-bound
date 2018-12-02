@@ -227,66 +227,100 @@ public class Main {
 ```
 
 
-## BFS版本(尚未加上格式)
+## BFS版本(加上格式，但無BEST)
 
 ```java
 package Scheduling;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class BFS2 {
-	static int nums[] = { 1, 2, 3 ,4};
+class scheduling {
+	int job;
+	int profit, deadline;
+
+	public scheduling(int job, int profit, int deadline) {
+		this.job = job;
+		this.profit = profit;
+		this.deadline = deadline;
+	}
+}
+
+public class Main {
+	static ArrayList<scheduling> list;
+	static String solution[];
+	static int arr[],total=0,max=0,N=0;
 
 	public static void main(String[] args) {
-		List<List<Integer>> list = subsets();
-		//System.out.println(list);
+		Scanner scn = new Scanner(System.in);
+		list = new ArrayList<>();
+		N = Integer.parseInt(scn.nextLine());
+		arr= new int[N];
+		solution = new String[N];
+		for (int i = 0; i < N; i++) {
+			String arr[] = scn.nextLine().split(" ");
+			list.add(new scheduling(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2])));
+		}
+		subsets();
+		System.out.println(max);
 	}
 
-	public static List<List<Integer>> subsets() {
-        // List vs ArrayList （google）
-        List<List<Integer>> results = new LinkedList<>();
-        
-        if (nums == null) {
-            return results; // 空列表
-        }
-        
-        Arrays.sort(nums);
-        
-        // BFS
-        Queue<List<Integer>> queue = new LinkedList<>();
-       queue.offer(new LinkedList<Integer>());
-        int count=1,cost=0,upper=Integer.MAX_VALUE;
-        while (!queue.isEmpty()) {
-        	List<Integer> subset = queue.poll();
-        	//if(subset.indexOf(nums.length)>=0) {
-        		results.add(subset);
-        		
-        	//}
-            
-            for (int i = 0; i < nums.length; i++) {
-            	cost=0;
-                if (subset.size() == 0 || subset.get(subset.size() - 1) < nums[i]) {
-                	
-                    List<Integer> nextSubset = new LinkedList<Integer>(subset);
-                    nextSubset.add(nums[i]);
-                    //演算法
-                    for(int j=nums[i]-1;j>=0;j--) {
-                    	if(nextSubset.indexOf(nums[j])<0) {
-                    		cost+=nums[j];
-                    	}
-                    }
-                    //寫入 queue
-                    queue.offer(nextSubset);System.out.println(nextSubset+" "+nums[i]+"  "+cost );
-                }
-            }
-            System.out.println(count++);
-        }
-        return results;
-    }
+	public static void subsets() {
+	       Queue<List<Integer>> queue = new LinkedList<>();
+	       queue.offer(new LinkedList<Integer>());
+	       int count=1,cost=0,upper=Integer.MAX_VALUE,u=0,total=0,arr[];
+	        while (!queue.isEmpty()) {
+	        	List<Integer> subset = queue.poll();
+	        	// 取得序列計算scheduling
+	        	if(subset.indexOf(list.size())>=0) {
+	        		//System.out.println(subset);
+	        	}
+	            
+	            for (int i = 0; i < list.size(); i++) {
+	            	cost=0;u=0;total=0;arr=new int[N];
+	                if (subset.size() == 0 || subset.get(subset.size() - 1) < i+1) {
+	                    List<Integer> nextSubset = new LinkedList<Integer>(subset);
+	                    nextSubset.add( i+1);
+	                    //演算法
+	                    for(int j=list.get(i).job-1;j>=0;j--) {
+	                    	if(nextSubset.indexOf(list.get(j).job)<0) {
+	                    		cost+=list.get(j).profit;
+	                    	}
+	                    }
+	                    for(int j=N-1;j>=0;j--) {
+	                    	if(nextSubset.indexOf(list.get(j).job)<0&&j!=i) {
+	                    		u+=list.get(j).profit;
+	                    	}
+	                    }
+	                    if(cost>upper)
+	                    	continue;
+	                    if(u<upper) {
+	                    	upper=u;
+	                    }
+	                    // 加總profit
+//	                    for(int j=0;j<nextSubset.size();j++) {
+//	                    	total+=list.get(nextSubset.get(j)-1).profit;
+//	                    }
+	                    for (int j = 0; j < nextSubset.size(); j++) {
+	                        for (int k = list.get(nextSubset.get(j)-1).deadline - 1; k >= 0; k--) {
+	                          if (arr[k] == 0) {
+	                            arr[k] = list.get(nextSubset.get(j)-1).profit;
+	                            total += list.get(nextSubset.get(j)-1).profit;
+	                            break;
+	                          }
+	                        }
+	                      }
+	                    //寫入 queue
+	                    queue.offer(nextSubset);System.out.println(nextSubset+" "+list.get(i).job+"  cost: "+cost+"  upper:"+u+" total:"+total );
+	                }
+	            }
+	        }
+	    }
 }
 ```
 
