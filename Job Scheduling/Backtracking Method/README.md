@@ -297,11 +297,7 @@ public class Main {
 	                    		u+=list.get(j).profit;
 	                    	}
 	                    }
-	                    if(cost>upper)
-	                    	continue;
-	                    if(u<upper) {
-	                    	upper=u;
-	                    }
+	                    
 	                    // 加總profit
 //	                    for(int j=0;j<nextSubset.size();j++) {
 //	                    	total+=list.get(nextSubset.get(j)-1).profit;
@@ -317,6 +313,106 @@ public class Main {
 	                      }
 	                    //寫入 queue
 	                    queue.offer(nextSubset);System.out.println(nextSubset+" "+list.get(i).job+"  cost: "+cost+"  upper:"+u+" total:"+total );
+	                }
+	            }
+	        }
+	    }
+}
+```
+
+## BFS 有best版本
+
+```java
+package Scheduling;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class scheduling {
+	int job;
+	int profit, deadline;
+
+	public scheduling(int job, int profit, int deadline) {
+		this.job = job;
+		this.profit = profit;
+		this.deadline = deadline;
+	}
+}
+
+public class Main {
+	static ArrayList<scheduling> list;
+	static String solution[];
+	static int arr[],total=0,N=0,max=Integer.MIN_VALUE;
+
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		list = new ArrayList<>();
+		N = Integer.parseInt(scn.nextLine());
+		arr= new int[N];
+		solution = new String[N];
+		for (int i = 0; i < N; i++) {
+			String arr[] = scn.nextLine().split(" ");
+			list.add(new scheduling(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2])));
+		}
+		subsets();
+		System.out.println(max);
+	}
+
+	public static void subsets() {
+	       Queue<List<Integer>> queue = new LinkedList<>();
+	       queue.offer(new LinkedList<Integer>());
+	       int count=1,cost=0,upper=Integer.MAX_VALUE,u=0,total=0,arr[];
+	        while (!queue.isEmpty()) {
+	        	List<Integer> subset = queue.poll();
+	        	// 取得序列計算scheduling
+	        	if(subset.indexOf(list.size())>=0) {
+	        		//System.out.println(subset);
+	        	}
+	            
+	            for (int i = 0; i < list.size(); i++) {
+	            	cost=0;u=0;total=0;arr=new int[N];
+	                if (subset.size() == 0 || subset.get(subset.size() - 1) < i+1) {
+	                    List<Integer> nextSubset = new LinkedList<Integer>(subset);
+	                    nextSubset.add( i+1);
+	                    //演算法
+	                    for(int j=i-1;j>=0;j--) {
+	                    	//if(nextSubset.indexOf(list.get(j).job)<0) {
+	                    		cost+=list.get(j).profit;
+	                    	//}
+	                    }
+	                    for(int j=N-1;j>=0;j--) {
+	                    	if(j!=i) {
+	                    		u+=list.get(j).profit;
+	                    	}
+	                    }
+	                    // 加總profit(檢查是否可以執行工作)
+	                    for (int j = 0; j < nextSubset.size(); j++) {
+	                    	for (int k = list.get(nextSubset.get(j)-1).deadline - 1; k >= 0; k--) {
+	                          if (arr[k] == 0) {
+	                            arr[k] = list.get(nextSubset.get(j)-1).profit;
+	                            total += list.get(nextSubset.get(j)-1).profit;
+	                            break;
+	                          }
+	                        }
+	                      }
+	                    if(total>max) {
+	                    	max=total;
+	                    	//System.out.println(nextSubset+" "+list.get(i).job+"  cost: "+cost+"  upper:"+u+" total:"+total+"  upp:"+upper );
+	                    }
+	                    if(cost>upper)
+	                    	continue;
+	                    if(u<upper) {
+	                    	upper=u;
+	                    }
+	                    
+	                    //寫入 queue
+	                    queue.offer(nextSubset);
+	                    System.out.println(nextSubset+" "+list.get(i).job+"  cost: "+cost+"  upper:"+u+" total:"+total +" count: "+count++);
 	                }
 	            }
 	        }
