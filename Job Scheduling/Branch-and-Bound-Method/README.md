@@ -108,3 +108,8 @@ public class Main {
 }
 
 ```
+
+
+ref: 
+- [Queue tutorial](https://openhome.cc/Gossip/Java/Queue.html)
+- [BFS Queue subset](https://www.jiuzhang.com/solution/subsets/#tag-highlight-lang-java)
