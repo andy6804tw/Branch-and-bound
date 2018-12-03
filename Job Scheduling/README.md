@@ -126,5 +126,20 @@ J5 45 2
 3 1 3 
 4 5 3 
 
+// greddy video test
+5
+1 20 2
+2 15 2
+3 10 1
+4 5 3
+5 1 3
+
+// branch and bound video test
+4
+1 5 1
+2 10 3
+3 6 2
+4 3 1
+
 **/
 ```
