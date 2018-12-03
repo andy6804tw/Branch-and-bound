@@ -6,6 +6,8 @@
 
 廣度優先搜尋法屬於盲目搜索(uninformed search)是利用佇列(Queue)來處理，通常以迴圈的方式呈現。
 
+使用寬度優先搜索算法的做法（BFS）一層一層的找到所有的子集
+
 ```java
 import java.util.ArrayList;
 import java.util.Arrays;
