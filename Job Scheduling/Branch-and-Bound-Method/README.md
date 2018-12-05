@@ -33,7 +33,7 @@ public class Main {
 			list.add(new scheduling(arr[0], Integer.parseInt(arr[1]), Integer.parseInt(arr[2])));
 		}
 		Scheduling();
-		System.out.println(maxProfit);
+		System.out.println("max profit: "+maxProfit);
 		// print selected job sequence
 		for(int i=0;i<solution.length;i++) {
 			if(solution[i]!=0) {
@@ -77,21 +77,26 @@ public class Main {
 						maxProfit = profit;
 						solution=arr;
 					}
-					// 計算 cost (成本)
-					for (int j = i - 1; j >= 0; j--) {
-						if (checked[j] == 0) {
+					
+//					for (int j = i - 1; j >= 0; j--) {
+//						if (checked[j] == 0) {
+//							cost += list.get(j).profit;
+//						}
+//					}
+					
+					for (int j = N - 1; j >= 0; j--) {
+						// 計算 cost (成本)
+						if (checked[j] == 0&&j<i) {
 							cost += list.get(j).profit;
 						}
-					}
-					// 計算 bound (上限)
-					for (int j = N - 1; j >= 0; j--) {
+						// 計算 bound (上限)
 						if (j != i && checked[j] == 0) {
 							bound += list.get(j).profit;
 						}
 					}
-					System.out.println(nextSubset + " " + list.get(i).job + "  cost: " + cost + "  upper:" + bound
-							+ " total:" + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
-							+ arr[2]);
+//					System.out.println(nextSubset + " " + list.get(i).job + "  cost: " + cost + "  upper:" + bound
+//							+ " total:" + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
+//							+ arr[2]);
 					// 成本不能大於最大上限
 					if (cost > upperBound)
 						continue;
@@ -106,6 +111,7 @@ public class Main {
 		}
 	}
 }
+
 
 ```
 
