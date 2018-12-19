@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+﻿import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
@@ -11,6 +11,24 @@ class scheduling {
 		this.job = job;
 		this.profit = profit;
 		this.deadline = deadline;
+	}
+}
+
+class Node {
+	int bound;
+	int cost;
+	int profit;
+	List<Integer> list;
+	int arr[];
+	int checked[];
+
+	public Node(int bound, int cost, int profit, List<Integer> list, int arr[], int checked[]) {
+		this.bound = bound;
+		this.cost = cost;
+		this.profit = profit;
+		this.list = list;
+		this.arr = arr;
+		this.checked = checked;
 	}
 }
 
@@ -29,8 +47,9 @@ public class Main {
 			list.add(new scheduling(arr[0], Integer.parseInt(arr[1]), Integer.parseInt(arr[2])));
 		}
 		Scheduling();
-		System.out.println("max profit: " + maxProfit);
+		System.out.println("Max Profit: " + maxProfit);
 		// print selected job sequence
+		System.out.print("Job Sequence: ");
 		for (int i = 0; i < solution.length; i++) {
 			if (solution[i] != 0) {
 				System.out.print(list.get(solution[i] - 1).job + " ");
@@ -42,33 +61,30 @@ public class Main {
 		// initial variable
 		int cost = 0, upperBound = Integer.MAX_VALUE, bound = 0, profit = 0, arr[], checked[];
 		// int count = 1;
-		Queue<List<Integer>> queue = new LinkedList<>();
-		queue.offer(new LinkedList<Integer>()); // offer()方法用來在佇列後端加入物件
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(new Node(0, 0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
 		while (!queue.isEmpty()) {
-			List<Integer> subset = queue.poll(); // poll()方法用來取出佇列前端物件
+			Node subNode = queue.poll(); // poll()方法用來取出佇列前端物件
+			List<Integer> sublist = subNode.list; // 取得目前等待工作序列名單
 			// Best first search(最佳優先搜尋)
 			for (int i = 0; i < N; i++) {
 				cost = 0;
 				bound = 0;
-				profit = 0;
-				arr = new int[N];
-				checked = new int[N];
-				if (subset.size() == 0 || subset.get(subset.size() - 1) < i + 1) {
-					List<Integer> nextSubset = new LinkedList<Integer>(subset);
+				profit = subNode.profit;
+				arr = subNode.arr.clone();
+				checked = subNode.checked.clone();
+				if (sublist.size() == 0 || sublist.get(sublist.size() - 1) < i + 1) {
+					List<Integer> nextSubset = new LinkedList<Integer>(sublist);
 					nextSubset.add(i + 1);
-					// 加總profit(並檢查是否可以執行工作)
-					for (int j = 0; j < nextSubset.size(); j++) {
-						for (int k = list.get(nextSubset.get(j) - 1).deadline - 1; k >= 0; k--) {
-							if (arr[k] == 0) {
-								// arr[k] = list.get(nextSubset.get(j) - 1).profit; // slot sign
-								arr[k] = nextSubset.get(j); // slot sign
-								profit += list.get(nextSubset.get(j) - 1).profit;
-								checked[nextSubset.get(j) - 1] = 1; // 目前工作被指派(標記1)
-								break;
-							}
+					for (int k = list.get(i).deadline - 1; k >= 0; k--) {
+						if (arr[k] == 0) {
+							arr[k] = i + 1; // slot sign
+							profit += list.get(i).profit;
+							checked[i] = 1; // 目前工作被指派(標記1)
+							break;
 						}
 					}
-					// 取得目前最大profit
+
 					if (profit > maxProfit) {
 						maxProfit = profit;
 						solution = arr;
@@ -84,8 +100,9 @@ public class Main {
 						}
 					}
 //					System.out.println(nextSubset + " " + list.get(i).job + "  cost: " + cost + "  upper:" + bound
-//							+ " total:" + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
-//							+ arr[2]);
+//							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
+//							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
+//							+ " " + checked[3]);
 					// 成本不能大於最大上限
 					if (cost > upperBound)
 						continue;
@@ -94,12 +111,13 @@ public class Main {
 						upperBound = bound;
 					}
 					// 寫入 queue
-					queue.offer(nextSubset);
+					queue.offer(new Node(bound, cost, profit, nextSubset, arr, checked));
 				}
 			}
 		}
 	}
 }
+
 /**
 
 10
