@@ -241,3 +241,4 @@ public class Main {
 ref: 
 - [Queue tutorial](https://openhome.cc/Gossip/Java/Queue.html)
 - [BFS Queue subset](https://www.jiuzhang.com/solution/subsets/#tag-highlight-lang-java)
+- [另一種方法](https://stackoverflow.com/questions/53620072/how-to-use-branch-and-bound-algorithm-solving-job-sequencing-problem-with-deadli)
