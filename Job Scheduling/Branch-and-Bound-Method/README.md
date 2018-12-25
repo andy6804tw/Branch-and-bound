@@ -241,6 +241,7 @@ public class Main {
 ## 此方法跟同學討論(跟原方法類似)
 profit計算目前成本
 bound計算目前成本+未來可行的前k大個
+profit排序
 
 ```java
 import java.util.LinkedList;
@@ -315,9 +316,9 @@ public class Main2 {
 		while (!queue.isEmpty()) {
 			Node subNode = queue.poll(); // poll()方法用來取出佇列前端物件
 			List<Integer> sublist = subNode.list; // 取得目前等待工作序列名單
-//			if(subNode.bound>upperBound)
-//				continue;
 			// Best first search(最佳優先搜尋)
+			if(subNode.bound<upperBound||subNode.profit<upperBound||sublist.size()==maxDeadline+1)
+				continue;
 			for (int i = 0; i < N; i++) {
 				cost = 0;
 				bound = 0;
@@ -382,7 +383,7 @@ public class Main2 {
 							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
 							+ " " + checked[3]+" i= "+i);
 					// 成本不能大於最大上限
-					if (bound < upperBound)
+					if (bound <= upperBound)
 						continue;
 					// 最大上限為每次 bound 最小值
 					if (profit > upperBound) {
@@ -463,11 +464,44 @@ J2 10 3
 J3 6 2
 J4 3 1
 
-4
-J1 30 3
-J2 25 1
-J3 20 1
-J4 15 2
+5
+J1 55 3
+J2 30 1
+J3 10 4
+J4 5 5
+J5 1 2
+
+// 定
+10
+J1 80 1
+J2 10 2
+J3 30 4
+J4 10 2
+J5 2 5
+J6 40 2
+J7 5 3
+J8 4 1
+J9 20 2
+J10 40 3
+
+10
+J1 85 1
+J2 50 8
+J3 8 3
+J4 5 10
+J5 1 2
+J6 0 9
+J7 2 4
+J8 10 5
+J9 5 7
+J10 1 6
+
+5
+J1 9 1
+J2 7 4
+J3 4 2
+J4 3 1
+J5 1 4
 **/
 ```
 
