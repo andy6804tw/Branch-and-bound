@@ -244,7 +244,11 @@ bound計算目前成本+未來可行的前k大個
 profit排序
 
 ```java
-package UVA;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -277,7 +281,7 @@ class Node {
 	}
 }
 
-public class Main2 {
+public class Main {
 	static LinkedList<scheduling> list;
 	static int[] solution;
 	static int N = 0, maxProfit = Integer.MIN_VALUE,maxDeadline=Integer.MIN_VALUE;
@@ -286,17 +290,23 @@ public class Main2 {
 		Scanner scn = new Scanner(System.in);
 		list = new LinkedList<>();
 		solution = new int[N];
+		System.out.print("請輸入工作數量: ");
 		N = Integer.parseInt(scn.nextLine()); // job count
+		System.out.println("請依序輸入Job Profit Deadline (以空白隔開):");
 		for (int i = 0; i < N; i++) {
 			String arr[] = scn.nextLine().split(" "); // (job name, profit, deadline)
 			if(Integer.parseInt(arr[2])>maxDeadline)
 				maxDeadline=Integer.parseInt(arr[2]);
 			list.add(new scheduling(arr[0], Integer.parseInt(arr[1]), Integer.parseInt(arr[2])));
 		}
-		System.out.println(maxDeadline);
 		mergeSort(list, 0, list.size() - 1);// (key要被排序資料,最左邊索引值,最右邊索引值,value值)
 		Scheduling();
-		System.out.println("Max Profit: " + maxProfit);
+		System.out.println("\n|  Job  |  Profit  | Deadline |");
+		System.out.println("-------------------------------");
+		for(int i=0;i<list.size();i++) {
+			System.out.printf("%5s %8d %10d\n",list.get(i).job,list.get(i).profit,list.get(i).deadline);
+		}
+		System.out.println("\nMax Profit: " + maxProfit);
 		// print selected job sequence
 		System.out.print("Job Sequence: ");
 		for (int i = 0; i < solution.length; i++) {
@@ -309,7 +319,7 @@ public class Main2 {
 	public static void Scheduling() {
 		// initial variable
 		int upperBound = 0, bound = 0, profit = 0, arr[], checked[];
-		int c = 1;
+		int count = 1;
 		Queue<Node> queue = new LinkedList<>();
 		queue.offer(new Node(0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
 		while (!queue.isEmpty()) {
@@ -335,24 +345,23 @@ public class Main2 {
 							break;
 						}
 					}
-					int count=0;
+					int k=0;
 					for(int j=0;j<N;j++) {
-						if(count==maxDeadline)
+						if(k==maxDeadline)
 							break;
 						if(j<=i&&checked[j]==1) {
 							bound += list.get(j).profit;
-							count++;
+							k++;
 						}
 						else if(checked[j]==0&&j>i) {
 							bound += list.get(j).profit;
-							count++;
+							k++;
 						}
 					}
-					System.out.println();
-					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
-							+ " profit: " + profit + " count: " + (c++) + " arr: " + arr[0] + " " + arr[1] + " "
-							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
-							+ " " + checked[3]);
+//					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
+//							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
+//							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
+//							+ " " + checked[3]);
 					// 判斷是否promising
 					if (bound <= upperBound)
 						continue;
