@@ -68,7 +68,7 @@ public class Main {
 	public static void Scheduling() {
 		// initial variable
 		int upperBound = 0, bound = 0, profit = 0, arr[], checked[];
-		int count = 1;
+		// int count = 1;
 		Queue<Node> queue = new LinkedList<>();
 		queue.offer(new Node(0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
 		while (!queue.isEmpty()) {
@@ -104,9 +104,12 @@ public class Main {
 							k++;
 						}
 					}
-					System.out.println(nextSubset + "  upper:" + bound + " profit: " + profit + " count: " + (count++) + " arr: "
-							+ arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " "
-							+ checked[2] + " " + checked[3]);
+					// System.out.println(nextSubset + " upper:" + bound
+					// + " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " +
+					// arr[1] + " "
+					// + arr[2] + " " + arr[3] + " check: " + checked[0] + " " + checked[1] + " " +
+					// checked[2]
+					// + " " + checked[3]);
 					// 判斷是否promising
 					if (profit > upperBound) {
 						upperBound = profit;// upperBound為每個節點profit的最大值
@@ -163,14 +166,37 @@ public class Main {
 	}
 }
 
-/**
- * 
- * // demo 5 J1 55 1 J2 30 2 J3 10 1 J4 5 3 J5 1 4
- * 
- * 
- * 10 J1 80 1 J2 45 2 J3 40 3 J4 30 3 J5 30 2 J6 20 4 J7 10 2 J8 5 3 J9 4 1 J10
- * 2 5
- * 
- * 10 J1 80 1 J2 2 5 J3 40 3 J4 10 2 J5 45 2 J6 20 4 J7 30 3 J8 5 3 J9 4 1 J10
- * 30 2
- **/
+/*
+// demo
+5
+J1 55 1 
+J2 30 2
+J3 10 1
+J4 5 3
+J5 1 4
+
+
+10
+J1 80 1
+J2 45 2
+J3 40 3
+J4 30 3
+J5 30 2
+J6 20 4
+J7 10 2
+J8 5 3
+J9 4 1
+J10 2 5
+
+10
+J1 80 1
+J2 2 5
+J3 40 3
+J4 10 2
+J5 45 2
+J6 20 4
+J7 30 3
+J8 5 3
+J9 4 1
+J10 30 2
+*/
