@@ -68,7 +68,7 @@ public class Main {
 	public static void Scheduling() {
 		// initial variable
 		int upperBound = 0, bound = 0, profit = 0, arr[], checked[];
-		int count = 1;
+		//int count = 1;
 		Queue<Node> queue = new LinkedList<>();
 		queue.offer(new Node(0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
 		while (!queue.isEmpty()) {
@@ -104,9 +104,9 @@ public class Main {
 							k++;
 						}
 					}
-					System.out.println(nextSubset + "  upper:" + bound + " profit: " + profit + " count: " + (count++) + " arr: "
-							+ arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " "
-							+ checked[2] + " " + checked[3]);
+					// System.out.println(nextSubset + "  upper:" + bound + " profit: " + profit + " count: " + (count++) + " arr: "
+					// 		+ arr[0] + " " + arr[1] + " " + arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " "
+					// 		+ checked[2] + " " + checked[3]);
 					// 判斷是否promising
 					if (profit > upperBound) {
 						upperBound = profit;// upperBound為每個節點profit的最大值
