@@ -244,6 +244,7 @@ bound計算目前成本+未來可行的前k大個
 profit排序
 
 ```java
+package UVA;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -262,15 +263,13 @@ class scheduling {
 
 class Node {
 	int bound;
-	int cost;
 	int profit;
 	List<Integer> list;
 	int arr[];
 	int checked[];
 
-	public Node(int bound, int cost, int profit, List<Integer> list, int arr[], int checked[]) {
+	public Node(int bound, int profit, List<Integer> list, int arr[], int checked[]) {
 		this.bound = bound;
-		this.cost = cost;
 		this.profit = profit;
 		this.list = list;
 		this.arr = arr;
@@ -309,10 +308,10 @@ public class Main2 {
 
 	public static void Scheduling() {
 		// initial variable
-		int cost = 0, upperBound = 0, bound = 0, profit = 0, arr[], checked[];
-		int count = 1;
+		int upperBound = 0, bound = 0, profit = 0, arr[], checked[];
+		int c = 1;
 		Queue<Node> queue = new LinkedList<>();
-		queue.offer(new Node(0, 0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
+		queue.offer(new Node(0, 0, new LinkedList<>(), new int[N], new int[N])); // offer()方法用來在佇列後端加入物件
 		while (!queue.isEmpty()) {
 			Node subNode = queue.poll(); // poll()方法用來取出佇列前端物件
 			List<Integer> sublist = subNode.list; // 取得目前等待工作序列名單
@@ -320,7 +319,6 @@ public class Main2 {
 			if(subNode.bound<upperBound||subNode.profit<upperBound||sublist.size()==maxDeadline+1)
 				continue;
 			for (int i = 0; i < N; i++) {
-				cost = 0;
 				bound = 0;
 				profit = subNode.profit;
 				arr = subNode.arr.clone();
@@ -337,60 +335,35 @@ public class Main2 {
 							break;
 						}
 					}
-
-					if (profit > maxProfit) {
-						maxProfit = profit;
-						solution = arr;
-					}
-					for (int j = N - 1; j >= 0; j--) {
-						// 計算 cost (成本)
-						if (checked[j] == 0 && j < i) {
-							cost += list.get(j).profit;
-						}
-//						// 計算 bound (上限)
-//						if (j != i && checked[j] == 0) {
-//							bound += list.get(j).profit;
-//						}
-					}
-//					int c=sublist.size()+1;
-//					bound=profit;
-//					for(int j=i+1;j<N;j++) {
-//						if(c==3)
-//							break;
-//						// 計算 bound (上限)
-//						if (checked[j] == 0) {
-//							System.out.print("j: "+j+" "+list.get(j).profit+" ");
-//							bound += list.get(j).profit;
-//							c++;
-//						}
-//					}
-					int c=0;
+					int count=0;
 					for(int j=0;j<N;j++) {
-						if(c==maxDeadline)
+						if(count==maxDeadline)
 							break;
 						if(j<=i&&checked[j]==1) {
 							bound += list.get(j).profit;
-							c++;
+							count++;
 						}
 						else if(checked[j]==0&&j>i) {
 							bound += list.get(j).profit;
-							c++;
+							count++;
 						}
 					}
 					System.out.println();
-					System.out.println(nextSubset + " " + list.get(i).job + "  cost: " + cost + "  upper:" + bound
-							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
+					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
+							+ " profit: " + profit + " count: " + (c++) + " arr: " + arr[0] + " " + arr[1] + " "
 							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
-							+ " " + checked[3]+" i= "+i);
-					// 成本不能大於最大上限
+							+ " " + checked[3]);
+					// 判斷是否promising
 					if (bound <= upperBound)
 						continue;
-					// 最大上限為每次 bound 最小值
+					// upperBound為每個節點profit的最大值
 					if (profit > upperBound) {
 						upperBound = profit;
+						maxProfit = profit;
+						solution = arr;
 					}
-					// 寫入 queue
-					queue.offer(new Node(bound, cost, profit, nextSubset, arr, checked));
+					// 寫入 queue (promising)
+					queue.offer(new Node(bound, profit, nextSubset, arr, checked));
 				}
 			}
 		}
@@ -405,31 +378,30 @@ public class Main2 {
 	}
 
 	public static void Merge(LinkedList<scheduling> list, int left, int mid, int right) {
-		//int[] temp = new int[right + 1]; // 建立一個temp陣列存放排序後的值
-		LinkedList<scheduling> temp =new LinkedList<>();
+		LinkedList<scheduling> temp =new LinkedList<>();// 建立一個temp串列存放排序後的值
 		int left_end = mid - 1; // 左邊最後一個位置
 		int index = left; // 位移起始點
 		int origin_left = left; // 將最左邊的變數儲存起來(最後搬移元素會用到)
 		for(int i=0;i<right + 1;i++)
 			temp.add(new scheduling("", 0, 0));
 
-		while ((left <= left_end) && (mid <= right)) { // 左右兩串列比大小依序放入temp陣列中儲存
+		while ((left <= left_end) && (mid <= right)) { // 左右兩串列比大小依序放入temp串列中儲存
 			if (list.get(left).profit >= list.get(mid).profit)
 				temp.add(index++,list.get(left++));
 			else
 				temp.add(index++,list.get(mid++));
 		}
 
-		if (left <= left_end) { // 若左邊的串列尚未走完將剩餘的數值依序放入temp陣列中
+		if (left <= left_end) { // 若左邊的串列尚未走完將剩餘的數值依序放入temp串列中
 			while (left <= left_end) {
 				temp.add(index++,list.get(left++));
 			}
-		} else { // 反之若右邊的串列尚未走完將剩餘的數值依序放入temp陣列中
+		} else { // 反之若右邊的串列尚未走完將剩餘的數值依序放入temp串列中
 			while (mid <= right) {
 				temp.add(index++,list.get(mid++));
 			}
 		}
-		// 最後將排序好的temp陣列複製到list串列中
+		// 最後將排序好的temp串列複製到list串列中
 		for (int i = origin_left; i <= right; i++) {
 			list.set(i, temp.get(i));
 		}
