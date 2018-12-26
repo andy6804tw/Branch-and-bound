@@ -17,7 +17,33 @@ branch and bound(分支定界)目標是找出滿足條件的一個解，所謂�
 ### Pseudocode
 排程問題演算法架構如下，首先建立一個 Queue 佇列來儲存每個子節點 Node，並清空初始化佇列。接著依照廣度優先搜尋的順序逐一清空走訪佇列內的子節點。此外在迴圈中去比對每個工作的deadline是否已到若無代表該工作能進行並標記起來。計算 profit、bound 最後再比對 bound 是否小於等於 upperbound，若成立則 nonpromising 該節點不繼續擴展。此外 upperbound 為每次節點中的最大 profit，故每次計算完都要進行檢查並且更新 upperbound。全部結束後若尚有子節點(promising)再將放入 Queue 中繼續走訪。
 
-![](https://i.imgur.com/aN2r4ZX.png)
+![](https://i.imgur.com/EiUQ6mq.png)
+
+
+```java=
+void scheduling() {
+    Queue < Node > PQ;
+    initialize(PQ);
+    while (!empty(PQ)) {
+        Node subNode;
+        Dequeue(PQ, subNode);
+        for (each child nextSubNode of subNode) {
+            Node nextSubNode;
+            if (Job can be selected) {
+                // checked the Job deadline legal or not
+                // calculate profit
+            }
+            // find the max profit
+            // calculate bound
+            if (bound is better than upperBound) {
+                upperBound = profit;
+                // promising
+                enqueue(PQ, nextSubNode);
+            }
+        }
+    }
+}
+```
 
 
 
@@ -51,11 +77,11 @@ branch and bound(分支定界)目標是找出滿足條件的一個解，所謂�
 
 
 ## Scheduling() 函式 
-此函式是使用最佳優先搜尋法來做排程運算，首先建立 cost 變數來計算目前的成本，建立 bound 計算所有未被指派工作的profit加總，以及建立變數 upperBound 來決定目前最大的 bound 值，profit變數是儲存每一次排程組合的利益值，`arr[]` 陣列是儲存每次工作排程的順序，`checked[]`陣列是紀錄目前某個工作是否已進入排程中1代表有排入工作，反之0尚未排入工作序列中。
-此演算法是利用 Queue 佇列實作，採先進先出觀念(FIFO)，再搭配細部修改變成最佳搜尋演算法實例，程式第七行採用 `while` 迴圈並判斷目前佇列中是否還有數值，直到佇列為空則跳出迴圈。程式第六行使用 `poll()` 方法用來取出佇列前端物件。第十三至十七行將所有變數初始化並取得上一個節點中計算出來的結果，二十一至二十八行計算profit加總並檢查是否可以執行此工作，若可以執行則將工作排成放入`arr[]` 陣列中儲存並將此工作的利益加到變數 profit 中，最後在 `checked[]` 陣列中標註1代表此工作已被排定。程式碼三十至三十三行是比較取得目前最大的 profit 並記錄下來。程式碼三十四至四十三行是分別計算 cost(成本)，計算方式為目前被指派工作之前尚未被指派工作的 profit 加總；而 upper 計算方式為除了自己和已被排定的工作之外將所有未被指派工作的 profit 加總。第四十七行是判斷成本是否大於最大上限，若大於則確定了界限(bound)故不做後半部子樹走訪，反之繼續走訪子節點故將放入佇列中等待走訪(branch)。程式碼四十八至五十行是判斷目前最小的 bound 值，若 `bound<upperBound` 則放入 upperBound 中取代代表目前節點中的最大上限值作為後面判斷的依據。
+此函式是使用最佳優先搜尋法來做排程運算，首先初始化 upperBound 和 bound 變數。profit 變數是儲存每一次排程組合的利益值，`arr[]` 陣列是儲存每次工作排程的順序，`checked[]`陣列是紀錄目前某個工作是否已進入排程中1代表有排入工作，反之0尚未排入工作序列中。
+此演算法是利用 Queue 佇列實作，採先進先出觀念(FIFO)，程式第八行採用 `while` 迴圈並判斷目前佇列中是否還有數值，直到佇列為空則跳出迴圈。程式第九行使用 `poll()` 方法用來取出佇列前端物件。第十三至十七行將所有變數初始化並取得上一個節點中計算出來的結果，二十二至二十九行計算profit加總並檢查是否可以執行此工作，若可以執行則將工作排成放入`arr[]` 陣列中儲存並將此工作的利益加到變數 profit 中，最後在 `checked[]` 陣列中標註1代表此工作已被排定。程式碼三十至四十一行是計算 bound，bound 計算方式是包含目前節點內可執行的工作尋找前k大的工作 Profit 並加總。第四十二到四十八行首先判斷是否 promising，若是(promising)則更新 upperBound 以及 maxProfit 接著繼續走訪子節點故將放入佇列中等待走訪(branch)，若 profit 小於 upperBound 則確定了界限(bound)故不做後半部子樹走訪(nonpromising)。
 
+![](https://i.imgur.com/wTdQRzf.png)
 
-![](https://i.imgur.com/Fwy3q1w.png)
 
 
 ## 排序
@@ -66,9 +92,9 @@ branch and bound(分支定界)目標是找出滿足條件的一個解，所謂�
 
 ## 執行與測試
 輸入說明:
-第一行為工作數量N，接下來會等待輸入N筆工作資料分別為 (job name、profit、deadline)。
+第一行為工作數量N，接下來會等待輸入N筆工作資料分別為 (Job Name、Profit、Deadline)。
 輸出說明:
-第一行為滿足條件的最大利益，第二行為該最大利益的一組解(工作序列)。
+首先會輸出排序後的串列，接著輸出計算結果第一行為滿足條件的最大利益，第二行為該最大利益的一組解(工作序列)。
 
 
 - 測試ㄧ
@@ -87,7 +113,7 @@ J5 1 4
 
 ![](https://i.imgur.com/mfjkKDo.png)
 
-State Sspace Tree:
+State Space Tree:
 
 ![](https://i.imgur.com/fOaQN7X.png)
 
