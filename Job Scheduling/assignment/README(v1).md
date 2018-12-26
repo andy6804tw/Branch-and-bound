@@ -1,4 +1,4 @@
-﻿## 介紹
+﻿## 介紹(VERSION 1)
 branch and bound(分支定界)目標是找出滿足條件的一個解，所謂分支就是採用廣度優先的策略，以Queue佇列方式下去實作，在每個節點中拋棄不滿足約束條件的節點，故不繼續擴展該節點以下的子樹。以下會以 branch and bound 來實作 scheduling with deadlines 排程的問題。
 
 ## 演算法
