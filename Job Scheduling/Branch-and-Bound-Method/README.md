@@ -249,11 +249,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
-
 class scheduling {
 	String job;
 	int profit, deadline;
