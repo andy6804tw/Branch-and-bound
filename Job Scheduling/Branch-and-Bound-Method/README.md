@@ -323,8 +323,9 @@ public class Main {
 			Node subNode = queue.poll(); // poll()方法用來取出佇列前端物件
 			List<Integer> sublist = subNode.list; // 取得目前等待工作序列名單
 			// Best first search(最佳優先搜尋)
-			if(subNode.bound<upperBound||subNode.profit<upperBound||sublist.size()==maxDeadline+1)
-				continue;
+			System.out.print(sublist+" ");
+//			if(subNode.bound<upperBound||subNode.profit<upperBound||sublist.size()==maxDeadline+1)
+//				continue;
 			for (int i = 0; i < N; i++) {
 				bound = 0;
 				profit = subNode.profit;
@@ -337,7 +338,6 @@ public class Main {
 						if (arr[k] == 0) {
 							arr[k] = i + 1; // slot sign
 							profit += list.get(i).profit;
-							//bound+=list.get(i).profit;
 							checked[i] = 1; // 目前工作被指派(標記1)
 							break;
 						}
@@ -355,21 +355,23 @@ public class Main {
 							k++;
 						}
 					}
-					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
+					System.out.println(nextSubset + "  upper:" + bound
 							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
 							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
 							+ " " + checked[3]);
-					// 判斷是否promising
-					if (bound <= upperBound)
-						continue;
+//					// 判斷是否promising
+//					if (bound <= upperBound)
+//						continue;
 					// upperBound為每個節點profit的最大值
 					if (profit > upperBound) {
 						upperBound = profit;
 						maxProfit = profit;
 						solution = arr;
+//						if(bound==profit)
+//							continue;
+						// 寫入 queue (promising)
+						queue.offer(new Node(bound, profit, nextSubset, arr, checked));
 					}
-					// 寫入 queue (promising)
-					queue.offer(new Node(bound, profit, nextSubset, arr, checked));
 				}
 			}
 		}
@@ -450,11 +452,11 @@ J4 5 4
 J5 1 2
 
 5
-J1 30 1 
-J2 1 2
+J1 30 2 
+J2 1 4
 J3 10 1
-J4 55 3
-J5 5 4
+J4 55 1
+J5 5 3
 
 // demo
 5
@@ -477,6 +479,18 @@ J7 45 3
 J8 4 1
 J9 20 2
 J10 5 3
+
+10
+J1 80 1
+J2 2 5
+J3 40 3
+J4 10 2
+J5 45 2
+J6 20 4
+J7 30 3
+J8 5 3
+J9 4 1
+J10 30 2
 
 10
 J1 80 1
