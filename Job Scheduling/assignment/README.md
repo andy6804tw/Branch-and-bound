@@ -61,47 +61,7 @@ branch and bound(分支定界)目標是找出滿足條件的一個解，所謂�
 ## 排序
 在排程 Branch-and-bound 演算法過程中，資料要先行做排序才能執行。原理跟01背包類似，我們這邊是要尋找每個工作最大利益 Profit 故在我們的程式中首先要先以 Profit 由大至小來排序。以下程式碼為第一個程式作業合併排序，在此作業中套用。
 
-```java=
-public static void mergeSort(LinkedList < scheduling > list, int left, int right) {
-    if (left < right) { // 當左邊大於右邊時代表只剩一個元素了
-        int mid = (left + right) / 2; // 每次對切，切到只剩一個為止
-        mergeSort(list, left, mid); // 左邊等份
-        mergeSort(list, mid + 1, right); // 右邊等份
-        Merge(list, left, mid + 1, right); // 排序且合併
-    }
-}
-
-public static void Merge(LinkedList < scheduling > list, int left, int mid, int right) {
-    LinkedList < scheduling > temp = new LinkedList < > (); // 建立一個temp串列存放排序後的值
-    int left_end = mid - 1; // 左邊最後一個位置
-    int index = left; // 位移起始點
-    int origin_left = left; // 將最左邊的變數儲存起來(最後搬移元素會用到)
-    for (int i = 0; i < right + 1; i++)
-        temp.add(new scheduling("", 0, 0));
-
-    while ((left <= left_end) && (mid <= right)) { // 左右兩串列比大小依序放入temp串列中儲存
-        if (list.get(left).profit >= list.get(mid).profit)
-            temp.add(index++, list.get(left++));
-        else
-            temp.add(index++, list.get(mid++));
-    }
-
-    if (left <= left_end) { // 若左邊的串列尚未走完將剩餘的數值依序放入temp串列中
-        while (left <= left_end) {
-            temp.add(index++, list.get(left++));
-        }
-    } else { // 反之若右邊的串列尚未走完將剩餘的數值依序放入temp串列中
-        while (mid <= right) {
-            temp.add(index++, list.get(mid++));
-        }
-    }
-    // 最後將排序好的temp串列複製到list串列中
-    for (int i = origin_left; i <= right; i++) {
-        list.set(i, temp.get(i));
-    }
-
-}
-```
+![](https://i.imgur.com/fVjdsvQ.png)
 
 
 ## 執行與測試
@@ -206,4 +166,6 @@ J5 45 2
 45+50+52+55+60=262
 
 ![](https://i.imgur.com/FMb4vH1.png)
+
+
 
