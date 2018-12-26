@@ -244,6 +244,8 @@ bound計算目前成本+未來可行的前k大個
 profit排序
 
 ```java
+package Branch;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -353,10 +355,10 @@ public class Main {
 							k++;
 						}
 					}
-//					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
-//							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
-//							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
-//							+ " " + checked[3]);
+					System.out.println(nextSubset + " " + list.get(i).job + "  upper:" + bound
+							+ " profit: " + profit + " count: " + (count++) + " arr: " + arr[0] + " " + arr[1] + " "
+							+ arr[2] + " " + arr[3] + "  check: " + checked[0] + " " + checked[1] + " " + checked[2]
+							+ " " + checked[3]);
 					// 判斷是否promising
 					if (bound <= upperBound)
 						continue;
@@ -475,6 +477,18 @@ J7 45 3
 J8 4 1
 J9 20 2
 J10 5 3
+
+10
+J1 80 1
+J2 45 2
+J3 40 3
+J4 30 3
+J5 30 2
+J6 20 4
+J7 10 2
+J8 5 3
+J9 4 1
+J10 2 5
 
 //定
 10
