@@ -15,29 +15,35 @@ branch and bound(分支定界)目標是找出滿足條件的一個解，所謂�
 
 
 ### Pseudocode
-排程問題演算法架構如下，首先建立一個 Queue 佇列來儲存每個子節點 Node，並清空初始化佇列。接著依照廣度優先搜尋的順序逐一清空走訪佇列內的子節點。此外在迴圈中去比對每個工作的deadline是否已到若無代表該工作能進行並標記起來。計算 profit、bound 最後再比對 bound 是否小於等於 upperbound，若成立則 nonpromising 該節點不繼續擴展。此外 upperbound 為每次節點中的最大 profit，故每次計算完都要進行檢查並且更新 upperbound。全部結束後若尚有子節點(promising)再將放入 Queue 中繼續走訪。
+排程問題演算法架構如下，首先以Profit先行排序接著建立一個 Queue 佇列來儲存每個子節點 Node，並清空初始化佇列。接著依照廣度優先搜尋的順序逐一清空走訪佇列內的子節點。此外在迴圈中去比對每個工作的deadline是否已到若無代表該工作能進行並標記起來。計算 profit、bound 最後再比對 bound 是否小於等於 best，若成立則 nonpromising 該節點不繼續擴展。此外 best 為每次節點中的最大 profit，故每次計算完都要進行檢查並且更新 best。全部結束後若尚有子節點(promising)再將放入 Queue 中繼續走訪。
 
-![](https://i.imgur.com/EiUQ6mq.png)
+![](https://i.imgur.com/akPkNgo.png)
+
 
 
 ```java=
 void scheduling() {
-    Queue < Node > PQ;
+    Sort(); // Sort by each Job's Profit
+    Queue < Node > PQ; // creat priority Queue
     initialize(PQ);
     while (!empty(PQ)) {
         Node subNode;
-        Dequeue(PQ, subNode);
+        Dequeue(PQ, subNode); // pull() and remove first node
         for (each child nextSubNode of subNode) {
             Node nextSubNode;
             if (Job can be selected) {
                 // checked the Job deadline legal or not
-                // calculate profit
+                // add up profit if deadline is legal
             }
-            // find the max profit
-            // calculate bound
-            if (bound is better than upperBound) {
-                upperBound = profit;
-                // promising
+            for(each job sequence){
+                // checked each Job can be assign or not
+                // calculate bound
+            }
+            
+            if (bound is better than best) {
+                // find the max profit
+                best = profit;
+                // promising and enqueue the child node
                 enqueue(PQ, nextSubNode);
             }
         }
